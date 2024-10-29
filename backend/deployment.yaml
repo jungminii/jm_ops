@@ -1,20 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: backend
   namespace: jm
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: frontend
+      app: backend
   template:
     metadata:
       labels:
-        app: frontend
+        app: backend
     spec:
       containers:
-        - name: frontend
-          image: aksaz01devvvd01registry.azurecr.io/jungminii/jungmin-vue_crud_security:20241029071450
+        - name: backend
+          image: aksaz01devvvd01registry.azurecr.io/jungminii/jungmin-springboot_crud_security
+:20241029071213
           ports:
-            - containerPort: 3000
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
